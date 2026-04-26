@@ -1,0 +1,120 @@
+# Dulor-Gate<!DOCTYPE html>
+<html>
+<head>
+<title>ACCESSING...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  color: #00ff00;
+  font-family: monospace;
+}
+
+/* Matrix canvas */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Typing text */
+#text {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  white-space: pre-line;
+}
+
+/* Glitch effect */
+.glitch {
+  animation: glitch 0.3s infinite;
+}
+@keyframes glitch {
+  0% { transform: translate(0px, 0px); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 2px); }
+  100% { transform: translate(0px, 0px); }
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+<div id="text"></div>
+
+<script>
+// MATRIX EFFECT
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+for (let x = 0; x < columns; x++) {
+  drops[x] = 1;
+}
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#0f0";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random() * letters.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 33);
+
+// TYPING EFFECT
+const lines = [
+  "Initializing system...",
+  "Connecting to dark server...",
+  "Bypassing security...",
+  "Access Granted ✔",
+  "Injecting virus...",
+  "WARNING: Data breach detected ⚠",
+  "Downloading private files...",
+  "Completed ✔"
+];
+
+let i = 0;
+const textDiv = document.getElementById("text");
+
+function typeLine() {
+  if (i < lines.length) {
+    const line = document.createElement("div");
+    line.textContent = lines[i];
+    line.classList.add("glitch");
+    textDiv.appendChild(line);
+    i++;
+    setTimeout(typeLine, 900);
+  }
+}
+typeLine();
+
+// AUTO FULLSCREEN
+document.body.onclick = () => {
+  document.documentElement.requestFullscreen();
+};
+</script>
+
+</body>
+</html>
